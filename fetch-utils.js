@@ -9,7 +9,6 @@ export async function createTodo(){
         .insert({ 
             todo: todo,
             complete: false, 
-            user_id: client.auth.user().id, 
         })
         .single();
 
@@ -20,14 +19,12 @@ export async function deleteAllTodos() {
     await client
         .from('todos')
         .delete()
-        .match({ user_id: client.auth.user().id, });
 }
 
 export async function getTodos() {
     const response = await client
         .select()
         .order('complete')
-        .match({ user_id: client.auth.user().id, });
 
     return checkError(response);    
 }
@@ -36,10 +33,7 @@ export async function completeTodo(id) {
     const response = await client
         .from('todos')
         .update({ complete: false })
-        .match({ 
-            user_id: client.auth.user().id, 
-            id: id,
-        });
+        .match({ id: id });
 
     return checkError(response);    
 }
